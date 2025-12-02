@@ -1,12 +1,29 @@
 import { PawPrint, Eye, EyeOff } from "lucide-react";
 import React, { useContext, useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 
 const Register = () => {
-   const { createUser, setUser, updateUser } = useContext(AuthContext);
-   const [showPassword, setShowPassword] = useState(false); //  state for password toggle
+   const { createUser, setUser, updateUser, signInWithGoogle } = useContext(AuthContext);
+   const [showPassword, setShowPassword] = useState(false);
+   const navigate = useNavigate();
 
+   //  Google Sign-In
+   const handleGoogleSignin = () => {
+      signInWithGoogle()
+         .then((result) => {
+            const user = result.user;
+            setUser(user);
+            alert(`Welcome ${user.displayName || "User"}!`);
+            navigate("/"); // redirect to home after success
+         })
+         .catch((error) => {
+            console.error("Google Sign-In Error:", error.message);
+            alert("Google Sign-In failed. Please try again.");
+         });
+   };
+
+   //  Normal Register
    const handleRegister = (e) => {
       e.preventDefault();
       const form = e.target;
@@ -15,7 +32,7 @@ const Register = () => {
       const photo = form.photo.value;
       const password = form.password.value;
 
-      //  Password validation
+      // Password validation
       if (password.length < 6) {
          alert("Password must be at least 6 characters long.");
          return;
@@ -29,16 +46,16 @@ const Register = () => {
          return;
       }
 
-      // Create user with email & password
+      // Create user
       createUser(email, password)
          .then((userCredential) => {
             const user = userCredential.user;
-
             updateUser({ displayName: name, photoURL: photo })
                .then(() => {
                   setUser({ ...user, displayName: name, photoURL: photo });
-                  alert(" Registration successful!");
+                  alert("Registration successful!");
                   form.reset();
+                  navigate("/"); // redirect after success
                })
                .catch((error) => {
                   console.error("Profile update error:", error);
@@ -122,7 +139,7 @@ const Register = () => {
                   </label>
                </div>
 
-               {/* Password with Toggle */}
+               {/* Password */}
                <div className="relative">
                   <input
                      type={showPassword ? "text" : "password"}
@@ -166,6 +183,31 @@ const Register = () => {
                   className="w-full bg-gradient-to-r from-pink-500 to-indigo-500 text-white font-semibold py-2 rounded-full hover:from-pink-600 hover:to-indigo-600 transition"
                >
                   Register
+               </button>
+
+               {/* Divider */}
+               <div className="flex items-center justify-center my-6">
+                  <div className="flex-grow h-px bg-white/40"></div>
+                  <span className="px-4 text-white text-sm font-medium">or</span>
+                  <div className="flex-grow h-px bg-white/40"></div>
+               </div>
+
+               {/* Google Sign-In */}
+               <button
+                  type="button"
+                  onClick={handleGoogleSignin}
+                  className="w-full rounded-3xl bg-white text-black border border-gray-200 py-2 flex justify-center items-center gap-2 hover:bg-gray-100 transition"
+               >
+                  <svg aria-label="Google logo" width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                     <g>
+                        <path fill="#fff" d="M0 0H512V512H0z"></path>
+                        <path fill="#34a853" d="M153 292c30 82 118 95 171 60h62v48A192 192 0 0190 341"></path>
+                        <path fill="#4285f4" d="M386 400a140 175 0 0053-179H260v74h102q-7 37-38 57"></path>
+                        <path fill="#fbbc02" d="M90 341a208 200 0 010-171l63 49q-12 37 0 73"></path>
+                        <path fill="#ea4335" d="M153 219c22-69 116-109 179-50l55-54c-78-75-230-72-297 55"></path>
+                     </g>
+                  </svg>
+                  Login with Google
                </button>
             </form>
 

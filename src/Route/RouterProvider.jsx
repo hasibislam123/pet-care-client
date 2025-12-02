@@ -1,7 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import error from '../assets/visuals-JpTY4gUviJM-unsplash.jpg';
 import HomeLayout from "../Laytout/HomeLayout";
-
 import Services from "../Page/Services";
 import MyProfile from "../Page/MyProfile";
 import Categorynews from "../Page/Categorynews";

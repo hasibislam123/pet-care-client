@@ -5,9 +5,8 @@ import { CircleLoader } from 'react-spinners';
 
 const PrivateRouter = ({ children }) => {
    const { user, loading } = use(AuthContext)
-   console.log(loading, user)
-const location = useLocation();
-console.log(location)
+   const location = useLocation();
+
 
    if (loading) {
       return <div className='min-h-screen flex justify-center items-center'><CircleLoader className='size-6' color="#fb8500" /></div>

@@ -10,6 +10,7 @@ const HomeLayout = () => {
       <div>
          <nav>
             <Navbar></Navbar>
+            {import.meta.env.VITE_name}
          </nav>
          <Hero></Hero>
          <main className="grid grid-cols-1 md:grid-cols-6 min-h-screen gap-6 p-6 md:p-10 lg:p-16">

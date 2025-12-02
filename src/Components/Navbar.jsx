@@ -71,7 +71,7 @@ const Navbar = () => {
                               <BiUser className="text-2xl" />
                            )}
 
-                           {/* Gmail Check */}
+                           
 
 
                            {/* Logout Button */}
@@ -91,9 +91,7 @@ const Navbar = () => {
                            >
                               Login
                            </Link>
-                           <button className="flex items-center gap-1 bg-white text-black px-3 py-1 rounded-lg hover:bg-gray-200 transition">
-                              Google <FcGoogle className="ml-1" />
-                           </button>
+                           
                         </>
                      )}
                   </div>
@@ -156,9 +154,7 @@ const Navbar = () => {
                         >
                            Login
                         </Link>
-                        <button className="flex items-center gap-1 bg-white text-black px-3 py-1 rounded-lg hover:bg-gray-200 transition">
-                           Google <FcGoogle className="ml-1" />
-                        </button>
+                        
                      </>
                   )}
                </div>

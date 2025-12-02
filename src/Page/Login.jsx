@@ -3,15 +3,43 @@ import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
 import { AuthContext } from "../Provider/AuthProvider";
 import toast from "react-hot-toast";
+import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-   const { signIn } = useContext(AuthContext);
+   const { signIn, signInWithGoogle } = useContext(AuthContext);
    const location = useLocation();
    const navigate = useNavigate();
 
    const [showPassword, setShowPassword] = useState(false);
    const [email, setEmail] = useState("");
 
+   // ✅ Google Sign In Function
+   const handleGoogleSignin = () => {
+      signInWithGoogle()
+         .then((result) => {
+            const user = result.user;
+            toast(`Welcome, ${user.displayName || "Google User"}!`, {
+               style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+               },
+            });
+            navigate(`${location.state ? location.state : "/"}`);
+         })
+         .catch((error) => {
+            toast(error.message, {
+               style: {
+                  borderRadius: "10px",
+                  background: "#ffe169",
+                  border: "2px solid black",
+                  color: "#000",
+               },
+            });
+         });
+   };
+
+   // ✅ Email/Password Login Function
    const handleLogin = (e) => {
       e.preventDefault();
       const form = e.target;
@@ -125,6 +153,23 @@ const Login = () => {
                   className="w-full bg-gradient-to-r from-indigo-500 to-pink-500 text-white font-semibold py-2 rounded-full hover:from-indigo-600 hover:to-pink-600 transition"
                >
                   Login
+               </button>
+
+               {/* Divider */}
+               <div className="flex items-center justify-center my-6">
+                  <div className="flex-grow h-px bg-white/40"></div>
+                  <span className="px-4 text-white text-sm font-medium">or</span>
+                  <div className="flex-grow h-px bg-white/40"></div>
+               </div>
+
+               {/* Google Login Button */}
+               <button
+                  type="button"
+                  onClick={handleGoogleSignin}
+                  className="btn w-full rounded-3xl bg-white text-black border-[#e5e5e5] flex justify-center items-center gap-2 hover:bg-gray-100 transition"
+               >
+                  <FcGoogle className="text-xl" />
+                  Login with Google
                </button>
             </form>
 

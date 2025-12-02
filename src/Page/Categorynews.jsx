@@ -7,11 +7,8 @@ const Categorynews = () => {
    const data = useLoaderData()
    const [categorynews, setcategorynews] = useState([]);
 
-   // console.log(id, data)
-
    useEffect(() => {
       const filteredNews = data.filter(news => news.slotsAvailable == id)
-      console.log(filteredNews)
       setcategorynews(filteredNews)
    }, [data, id])
    return (
