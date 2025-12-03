@@ -76,19 +76,29 @@ const AuthProvider = ({ children }) => {
           console.error("Error message:", error.message);
           
           // Provide more specific error messages
+          let errorMessage = "Google Sign-In failed. Please try again.";
+          
           if (error.code === 'auth/popup-blocked') {
-            throw new Error("Popup blocked by browser. Please allow popups for this site.");
+            errorMessage = "Popup blocked by browser. Please allow popups for this site.";
           } else if (error.code === 'auth/cancelled-popup-request') {
-            throw new Error("Authentication popup was closed.");
+            errorMessage = "Authentication popup was closed.";
           } else if (error.code === 'auth/popup-closed-by-user') {
-            throw new Error("Google sign in was cancelled.");
+            errorMessage = "Google sign in was cancelled.";
           } else if (error.code === 'auth/internal-error') {
-            throw new Error("Internal error occurred. Please try again.");
+            errorMessage = "Internal error occurred. Please try again.";
           } else if (error.code === 'auth/network-request-failed') {
-            throw new Error("Network error. Please check your connection and try again.");
+            errorMessage = "Network error. Please check your connection and try again.";
+          } else if (error.code === 'auth/operation-not-allowed') {
+            errorMessage = "Google Sign-In is not enabled. Please contact the administrator.";
+          } else if (error.code === 'auth/invalid-API-key') {
+            errorMessage = "Invalid API key. Please check your configuration.";
+          } else if (error.code === 'auth/unauthorized-domain') {
+            errorMessage = "This domain is not authorized for OAuth operations. Please contact the administrator.";
+          } else if (error.message) {
+            errorMessage = error.message;
           }
           
-          throw error;
+          throw new Error(errorMessage);
         });
    };
 
