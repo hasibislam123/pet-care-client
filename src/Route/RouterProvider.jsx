@@ -12,6 +12,9 @@ import Details from "../Page/Details";
 import PrivateRouter from "../Provider/PrivateRouter";
 import { CircleLoader } from "react-spinners";
 import ForgotPassword from "../Components/ForgotPassword";
+import About from "../Page/About";
+import Contact from "../Page/Contact";
+import Support from "../Page/Support";
 
 const router = createBrowserRouter([
    {
@@ -27,8 +30,24 @@ const router = createBrowserRouter([
             element: <Services></Services>,
          },
          {
+            path: "/about",
+            element: <About></About>,
+         },
+         {
+            path: "/contact",
+            element: <Contact></Contact>,
+         },
+         {
+            path: "/support",
+            element: <Support></Support>,
+         },
+         {
             path: "/myprofile",
-            element: <MyProfile></MyProfile>,
+            element: (
+               <PrivateRouter>
+                  <MyProfile></MyProfile>
+               </PrivateRouter>
+            ),
          },
          {
             path: "/category/:id",
@@ -58,11 +77,7 @@ const router = createBrowserRouter([
    },
    {
       path: "/detail/:id",
-      element: (
-         <PrivateRouter>
-            <Details></Details>
-         </PrivateRouter>
-      ),
+      element: <Details></Details>,
       loader: () => fetch("/cart.json"),
       hydrateFallbackElement: <CircleLoader color="#fb8500" />,
    },

@@ -3,14 +3,12 @@ import { FaStar } from "react-icons/fa";
 import { Link } from "react-router"; 
 
 const Cart = ({ news }) => {
-   const { id, serviceName } = news; // ekhane thik ache
+   const { id } = news; 
    
-   
-
    return (
-      <div className="max-w-sm bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 m-4">
+      <div className="bg-white rounded-3xl shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 m-4 flex flex-col h-full">
          {/* Image */}
-         <div className="relative h-70 overflow-hidden">
+         <div className="relative h-48 overflow-hidden">
             <img
                src={news.image}
                alt={news.serviceName}
@@ -23,9 +21,9 @@ const Cart = ({ news }) => {
          </div>
 
          {/* Content */}
-         <div className="p-6">
+         <div className="p-6 flex flex-col flex-grow">
             <h2 className="text-xl font-bold text-gray-800 mb-2">{news.serviceName}</h2>
-            <p className="text-gray-600 text-sm mb-4">{news.description}</p>
+            <p className="text-gray-600 text-sm mb-4 flex-grow">{news.description}</p>
 
             <p className="text-gray-700 text-sm mb-1">
                <span className="font-semibold">Provider:</span> {news.providerName}
@@ -47,7 +45,7 @@ const Cart = ({ news }) => {
 
             <Link
                to={`/detail/${id}`} 
-               className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-2 rounded-xl hover:scale-105 transition-transform duration-300"
+               className="w-full p-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-2 rounded-xl hover:scale-105 transition-transform duration-300 text-center"
             >
                View Details 
             </Link>

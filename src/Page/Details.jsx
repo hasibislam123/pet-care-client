@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Navbar from "../Components/Navbar";
 import { useLoaderData, useParams } from "react-router";
 import { toast, Toaster } from "react-hot-toast";
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaRegClock, FaTag, FaUserMd } from "react-icons/fa";
 import { Eye, EyeOff } from "lucide-react";
 
 const Details = () => {
@@ -21,99 +20,133 @@ const Details = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    toast("Service booked successfully!");
+    toast.success("Service booked successfully!");
     setFormData({ name: "", email: "" });
   };
 
   if (!news) {
     return (
-      <div>
-        <Navbar />
-        <div className="text-center mt-20 text-xl text-gray-700">Loading...</div>
-      </div>
+      <div className="text-center mt-20 text-xl text-gray-700">Loading...</div>
     );
   }
 
   return (
-    <div>
-      <Navbar />
-      <div className="max-w-5xl mx-auto p-6">
-        <div className="bg-white shadow-lg rounded-xl p-6 flex flex-col md:flex-row gap-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6">
+      <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
+        {/* Header with breadcrumb */}
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-500 text-white p-6">
+          <h1 className="text-3xl font-bold">{news.serviceName}</h1>
+          <p className="mt-2 opacity-90">{news.category}</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
           {/* Left: Image Section */}
-          <div className="md:w-1/2">
+          <div className="rounded-xl overflow-hidden shadow-lg">
             <img
-              src={news.image || "https://via.placeholder.com/400x300"}
-              alt={news.title}
-              className="rounded-xl w-full h-96 object-cover"
+              src={news.image || "https://via.placeholder.com/600x400"}
+              alt={news.serviceName}
+              className="w-full h-96 object-cover"
             />
           </div>
 
           {/* Right: Details + Form */}
-          <div className="md:w-1/2 flex flex-col justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2 text-gray-800">{news.title}</h1>
-              {news.category && (
-                <p className="text-gray-600 mb-3">
-                  <span className="font-semibold">Category:</span> {news.category}
-                </p>
-              )}
-              <p className="text-lg font-semibold text-gray-700 mb-1">
-                Provider: {news.providerName}
+          <div className="flex flex-col">
+            <div className="flex-grow">
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <span className="flex items-center bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
+                  <FaTag className="mr-2" /> ${news.price}
+                </span>
+                <span className="flex items-center bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
+                  <FaStar className="mr-2" /> {news.rating}
+                </span>
+                <span className="flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                  <FaRegClock className="mr-2" /> {news.slotsAvailable} slots
+                </span>
+              </div>
+
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Service Description</h2>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                {news.description}
               </p>
-              <p className="text-gray-600 mb-4">{news.providerEmail}</p>
-              <p className="text-gray-700 mb-4">{news.description}</p>
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">Price:</span> ${news.price}
-              </p>
-              <p className="text-gray-700 mb-2 flex gap-2 items-center">
-                <span className="font-semibold">Rating:</span> {news.rating} <FaStar className="text-yellow-500" />
-              </p>
-              <p className="text-gray-700 mb-2">
-                <span className="font-semibold">Slots Available:</span> {news.slotsAvailable}
-              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-2 flex items-center">
+                    <FaUserMd className="mr-2 text-purple-600" /> Provider
+                  </h3>
+                  <p className="text-gray-700">{news.providerName}</p>
+                  <p className="text-gray-600 text-sm mt-1">{news.providerEmail}</p>
+                </div>
+                
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <h3 className="font-semibold text-lg mb-2">Service Details</h3>
+                  <p className="text-gray-700">Category: {news.category}</p>
+                  <p className="text-gray-700 mt-1">ID: {news.id}</p>
+                </div>
+              </div>
             </div>
 
             {/* Booking Form */}
-            <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-6">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                required
-                className="border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              />
+            <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-6 rounded-2xl shadow-inner">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Book This Service</h3>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-gray-700 mb-2">Full Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your full name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
 
-              {/* Password with toggle  */}
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-400 focus:outline-none"
-                />
+                <div>
+                  <label className="block text-gray-700 mb-2">Email Address</label>
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    required
+                    className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 mb-2">Password</label>
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Enter your password"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      required
+                      className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-purple-500 focus:outline-none pr-10"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-gray-500 hover:text-gray-800 transition"
+                    >
+                      {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                    </button>
+                  </div>
+                </div>
+
                 <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-gray-500 hover:text-gray-800 transition"
+                  type="submit"
+                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition transform hover:scale-105"
                 >
-                  {showPassword ? <EyeOff size={22} /> : <Eye size={22} />}
+                  Confirm Booking
                 </button>
-              </div>
-
-              <button
-                type="submit"
-                className="mt-4 bg-gradient-to-r from-indigo-500 to-pink-500 hover:from-indigo-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-lg transition"
-              >
-                Book Now
-              </button>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </div>
-      <Toaster />
+      <Toaster position="top-right" />
     </div>
   );
 };

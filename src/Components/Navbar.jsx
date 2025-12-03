@@ -7,6 +7,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { FcGoogle, FcOk } from "react-icons/fc";
 import { toast } from "react-toastify";
 
+
 const Navbar = () => {
    const { user, logout } = useContext(AuthContext);
    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -17,45 +18,75 @@ const Navbar = () => {
          .catch((error) => toast.error(error.message));
    };
 
+   // Public routes visible to all users
+   const publicRoutes = (
+      <>
+         <NavLink to='/' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition")}>
+            Home
+         </NavLink>
+         <NavLink to='/category/1' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            All Items
+         </NavLink>
+         <NavLink to='/service' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            Services
+         </NavLink>
+         <NavLink to='/about' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            About Us
+         </NavLink>
+         <NavLink to='/contact' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            Contact
+         </NavLink>
+         <NavLink to='/support' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            Support
+         </NavLink>
+      </>
+   );
+
+   // Private routes visible only to authenticated users
+   const privateRoutes = (
+      <>
+         <NavLink to='/myprofile' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            My Profile
+         </NavLink>
+         <NavLink to='/orders' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
+            My Orders
+         </NavLink>
+      </>
+   );
+
    return (
-      <nav className="bg-gradient-to-r from-purple-600 to-indigo-500 text-white shadow-md sticky top-0 z-50">
-         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <nav className="bg-gradient-to-r from-purple-600 to-indigo-500 text-white shadow-md sticky top-0 z-50 ">
+         <div className=" mx-auto px-4 sm:col-span-1 sm:px-6">
             <div className="flex justify-between h-16 items-center gap-3">
-
-               <div className="grid grid-cols-1">
-                  <div className="flex-shrink-0 text-2xl font-bold tracking-wide">
-                     PetCare
-                  </div>
-
-                  {/* Show user email below logo if logged in */}
+               {/* Logo */}
+               <div className="grid-shrink-0 text-2xl font-bold tracking-wide">
+                  PetCare
                   {user && (
-                     <span className="text-sm text-white flex items-center mt-1">
-                        {user.email}
-                        <FcOk className="ml-1" />
-                     </span>
-                  )}
+                  <span className="text-[10px] text-white flex items-center mt-1">
+                     {user.email}
+                     <FcOk className="ml-1" />
+                  </span>
+               )}
                </div>
 
+               {/* Show user email below logo if logged in */}
+               
+
                {/* Marquee */}
-               <div className="w-[600px] border-2 rounded-2xl px-3 hidden md:block">
+               {/* <div className="w-[600px] border-2 rounded-2xl px-3 hidden md:block">
                   <Marquee pauseOnHover={true}>
                      <span className="bg-gradient-to-r from-[#e77457] via-[#e85d04] to-[#ffba08] bg-clip-text text-transparent font-bold text-lg rounded-2xl">
                         Keep your furry friends warm and healthy during the chilly season. Explore winter care tips, grooming services, and cozy outfits.
                      </span>
                   </Marquee>
-               </div>
+               </div> */}
 
                {/* Desktop Menu */}
                <div className="hidden md:flex items-center space-x-6">
-                  <NavLink to='/' className="hover:text-yellow-300 transition">
-                     Home
-                  </NavLink>
-                  <NavLink to='/service' className="hover:text-yellow-300 transition px-3 py-2 rounded-3xl">
-                     Services
-                  </NavLink>
-                  <NavLink to='/myprofile' className="hover:text-yellow-300 transition px-3 py-2 rounded-3xl flex">
-                     Profile
-                  </NavLink>
+                  {publicRoutes}
+                  
+                  {/* Private routes - only shown when user is logged in */}
+                  {user && privateRoutes}
 
                   <div className="flex items-center space-x-2">
                      {user ? (
@@ -70,9 +101,6 @@ const Navbar = () => {
                            ) : (
                               <BiUser className="text-2xl" />
                            )}
-
-                           
-
 
                            {/* Logout Button */}
                            <button
@@ -91,7 +119,6 @@ const Navbar = () => {
                            >
                               Login
                            </Link>
-                           
                         </>
                      )}
                   </div>
@@ -111,18 +138,30 @@ const Navbar = () => {
 
          {/* Mobile Menu */}
          {isMobileMenuOpen && (
-            <div className="md:hidden bg-purple-700">
-               <NavLink to='/' className="block px-4 py-2 text-white hover:bg-purple-600 rounded-3xl">
-                  Home
-               </NavLink>
-               <NavLink to='/service' className="block px-4 py-2 text-white hover:bg-purple-600 rounded-3xl">
-                  Services
-               </NavLink>
-               <NavLink to='/myprofile' className=" block px-4 py-2 text-white hover:bg-purple-600 rounded-3xl">
-                  Profile
-               </NavLink>
+            <div className="md:hidden bg-purple-700 rounded-b-xl">
+               {publicRoutes}
+               
+               {/* Private routes - only shown when user is logged in */}
+               {user && (
+                  <>
+                     <NavLink 
+                        to='/myprofile' 
+                        className={({ isActive }) => (isActive ? "block px-4 py-2 text-yellow-300 font-semibold" : "block px-4 py-2 text-white hover:bg-purple-600 rounded-3xl")}
+                        onClick={() => setMobileMenuOpen(false)}
+                     >
+                        My Profile
+                     </NavLink>
+                     <NavLink 
+                        to='/orders' 
+                        className={({ isActive }) => (isActive ? "block px-4 py-2 text-yellow-300 font-semibold" : "block px-4 py-2 text-white hover:bg-purple-600 rounded-3xl")}
+                        onClick={() => setMobileMenuOpen(false)}
+                     >
+                        My Orders
+                     </NavLink>
+                  </>
+               )}
 
-               <div className="flex items-center space-x-2">
+               <div className="flex items-center space-x-2 p-4">
                   {user ? (
                      <>
                         {/* User Photo when logged in */}
@@ -138,7 +177,10 @@ const Navbar = () => {
 
                         {/* Logout Button */}
                         <button
-                           onClick={handleLogout}
+                           onClick={() => {
+                              handleLogout();
+                              setMobileMenuOpen(false);
+                           }}
                            className="bg-transparent border-2 border-white px-2 py-1 rounded-lg hover:bg-white hover:text-purple-700 transition"
                         >
                            Logout
@@ -151,10 +193,10 @@ const Navbar = () => {
                         <Link
                            to="/auth/login"
                            className="bg-transparent border-2 border-white px-4 py-1 rounded-lg hover:bg-white hover:text-purple-700 transition"
+                           onClick={() => setMobileMenuOpen(false)}
                         >
                            Login
                         </Link>
-                        
                      </>
                   )}
                </div>
