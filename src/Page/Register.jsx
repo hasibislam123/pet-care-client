@@ -2,6 +2,7 @@ import { PawPrint, Eye, EyeOff } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../Contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const Register = () => {
    const { createUser, setUser, updateUser, signInWithGoogle } = useContext(AuthContext) || {};
@@ -11,7 +12,14 @@ const Register = () => {
    //  Google Sign-In
    const handleGoogleSignin = () => {
       if (!signInWithGoogle) {
-         alert("Authentication is not available");
+         toast("Authentication is not available", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
          return;
       }
       
@@ -19,12 +27,40 @@ const Register = () => {
          .then((result) => {
             const user = result.user;
             setUser && setUser(user);
-            alert(`Welcome ${user.displayName || "User"}!`);
+            toast(`Welcome ${user.displayName || "User"}!`, {
+               style: {
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
+               },
+            });
             navigate("/"); // redirect to home after success
          })
          .catch((error) => {
-            console.error("Google Sign-In Error:", error.message);
-            alert("Google Sign-In failed. Please try again.");
+            console.error("Google Sign-In Error:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
+            
+            let errorMessage = error.message;
+            // Handle common Firebase Google auth errors
+            if (error.code === 'auth/popup-blocked') {
+               errorMessage = "Popup blocked by browser. Please allow popups for this site.";
+            } else if (error.code === 'auth/cancelled-popup-request') {
+               errorMessage = "Authentication popup was closed.";
+            } else if (error.code === 'auth/popup-closed-by-user') {
+               errorMessage = "Google sign in was cancelled.";
+            } else if (error.code === 'auth/internal-error') {
+               errorMessage = "Internal error occurred. Please try again.";
+            }
+            
+            toast(errorMessage, {
+               style: {
+                  borderRadius: "10px",
+                  background: "#ffe169",
+                  border: "2px solid black",
+                  color: "#000",
+               },
+            });
          });
    };
 

@@ -1,139 +1,129 @@
-#  Pet Care App
+# Pet Care App
 
-A modern, responsive web application for pet owners to discover and book winter care services for their beloved companions.
+Welcome to the Pet Care App - your one-stop solution for all your pet care needs!
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
-![Firebase](https://img.shields.io/badge/Firebase-ffaa00?style=for-the-badge&logo=Firebase&logoColor=white)
-![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+## Features
 
-##  Table of Contents
+- 🐾 Browse pet care services by category
+- 🔐 Secure user authentication (Email/Password & Google Sign-In)
+- 📱 Responsive design for all devices
+- 🎨 Beautiful UI with glassmorphism effects
+- 🛒 Service booking and management
 
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-- [Project Structure](#project-structure)
-- [Screenshots](#screenshots)
-- [Contributing](#contributing)
-- [License](#license)
+## Technologies Used
 
-##  Features
+- React.js
+- Vite
+- Firebase Authentication
+- Tailwind CSS
+- DaisyUI
+- React Router
+- React Hot Toast
 
-- **Pet Service Discovery**: Browse through various winter care services for your pets
-- **Category-based Navigation**: Easily find services organized by categories
-- **User Authentication**: Secure sign-up and login using Firebase Authentication
-- **Responsive Design**: Works seamlessly on mobile, tablet, and desktop devices
-- **Detailed Service Information**: View comprehensive details about each service
-- **Profile Management**: Manage your personal information and booking history
-- **Modern UI/UX**: Clean and intuitive interface built with Tailwind CSS and DaisyUI
-
-##  Tech Stack
-
-- **Frontend**: React 18, Vite
-- **Styling**: Tailwind CSS v4, DaisyUI
-- **Routing**: React Router v7
-- **Authentication**: Firebase Authentication
-- **State Management**: React Context API
-- **Icons**: Lucide React, React Icons
-- **Notifications**: React Hot Toast
-- **Loading Indicators**: React Spinners
-- **Animations**: React Fast Marquee, Swiper
-
-##  Getting Started
+## Getting Started
 
 ### Prerequisites
 
-- Node.js (version 16 or higher)
+- Node.js (version 14 or higher)
 - npm or yarn
-- Firebase account for authentication
+- Firebase account
 
 ### Installation
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/pet-care-app.git
+   git clone <repository-url>
    ```
 
-2. Navigate to the project directory:
-   ```bash
-   cd pet-care-app
-   ```
-
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn install
    ```
 
-4. Create a `.env.local` file in the root directory and add your Firebase configuration:
-   ```env
-   VITE_apiKey=your_api_key
-   VITE_authDomain=your_auth_domain
-   VITE_projectId=your_project_id
-   VITE_storageBucket=your_storage_bucket
-   VITE_messagingSenderId=your_messaging_sender_id
-   VITE_appId=your_app_id
-   ```
+3. Create a Firebase project:
+   - Go to [Firebase Console](https://console.firebase.google.com/)
+   - Create a new project
+   - Enable Authentication (Email/Password and Google Sign-In methods)
+
+4. Set up environment variables:
+   - Copy the `.env.example` file to `.env`
+   - Replace the placeholder values with your Firebase project credentials:
+     ```
+     VITE_apiKey=your-api-key
+     VITE_authDomain=your-project-id.firebaseapp.com
+     VITE_projectId=your-project-id
+     VITE_storageBucket=your-project-id.appspot.com
+     VITE_messagingSenderId=your-messaging-sender-id
+     VITE_appId=your-app-id
+     ```
 
 5. Start the development server:
    ```bash
    npm run dev
-   # or
-   yarn dev
    ```
 
-6. Open your browser and visit `http://localhost:5173`
+### Firebase Configuration
 
-### Available Scripts
+To enable Google authentication and other Firebase features:
 
-- `npm run dev` - Starts the development server
-- `npm run build` - Builds the app for production
-- `npm run preview` - Previews the production build locally
-- `npm run lint` - Runs ESLint on the project
+1. In your Firebase project, go to Project Settings
+2. Under "General" tab, copy the web app configuration
+3. Paste the values in your `.env` file
+4. For Google Sign-In:
+   - Go to Authentication > Sign-in method
+   - Enable Google sign-in provider
+   - Add your domain to authorized domains if deploying to a custom domain
 
-##  Project Structure
+### Deployment
+
+#### Vercel Deployment
+
+1. Push your code to GitHub
+2. Connect your repository to Vercel
+3. Add environment variables in Vercel project settings:
+   - VITE_apiKey
+   - VITE_authDomain
+   - VITE_projectId
+   - VITE_storageBucket
+   - VITE_messagingSenderId
+   - VITE_appId
+4. Deploy!
+
+## Troubleshooting
+
+### Google Authentication Not Working?
+
+1. **Check Environment Variables**: Ensure all Firebase configuration values are correctly set in your `.env` file or deployment platform
+2. **Enable Google Sign-In**: In Firebase Console, go to Authentication > Sign-in method and enable Google
+3. **Authorized Domains**: Make sure your deployment domain is added to Firebase authorized domains
+4. **Browser Popups**: Ensure popups are not blocked by your browser
+5. **Console Errors**: Check browser console for specific error messages
+
+### Blank Page on Deployment?
+
+1. **Check Firebase Config**: Missing or incorrect Firebase configuration can cause initialization failures
+2. **Environment Variables**: Ensure all required environment variables are set in your deployment platform
+3. **Check Console**: Open browser developer tools and check for JavaScript errors
+
+## Project Structure
 
 ```
 src/
-├── Components/        # Reusable UI components
-├── Layout/            # Page layouts
-├── Pages/             # Individual pages
-├── Providers/         # Context providers and routers
-├── Routes/            # Route configuration
-├── Firebase/          # Firebase configuration
-├── Assets/            # Static assets
-└── Utils/             # Utility functions
+├── Components/          # Reusable UI components
+├── Contexts/            # React Context providers
+├── firebase/            # Firebase configuration
+├── Laytout/             # Layout components
+├── Page/                # Page components
+├── Provider/            # Authentication provider
+├── Route/               # Routing configuration
+├── App.jsx              # Main app component
+└── main.jsx             # Entry point
 ```
 
-## 📸 Screenshots
+## Contributing
 
-> _Coming soon: Beautiful screenshots of the application in action_
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 🤝 Contributing
+## License
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgements
-
-- [React](https://reactjs.org/) - A JavaScript library for building user interfaces
-- [Vite](https://vitejs.dev/) - Next generation frontend tooling
-- [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
-- [Firebase](https://firebase.google.com/) - Backend-as-a-Service platform
-- [DaisyUI](https://daisyui.com/) - Tailwind CSS Components
-
----
-
-<p align="center">Made with  for pet lovers everywhere</p>
+This project is licensed under the MIT License.

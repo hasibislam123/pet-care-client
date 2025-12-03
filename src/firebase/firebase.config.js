@@ -5,28 +5,39 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_apiKey || "",
-  authDomain: import.meta.env.VITE_authDomain || "",
-  projectId: import.meta.env.VITE_projectId || "",
-  storageBucket: import.meta.env.VITE_storageBucket || "",
-  messagingSenderId: import.meta.env.VITE_messagingSenderId || "",
-  appId: import.meta.env.VITE_appId || "",
+  apiKey: import.meta.env.VITE_apiKey,
+  authDomain: import.meta.env.VITE_authDomain,
+  projectId: import.meta.env.VITE_projectId,
+  storageBucket: import.meta.env.VITE_storageBucket,
+  messagingSenderId: import.meta.env.VITE_messagingSenderId,
+  appId: import.meta.env.VITE_appId,
 };
+
+// Log the config to help with debugging (remove sensitive data in production)
+console.log("Firebase config keys present:", {
+  hasApiKey: !!import.meta.env.VITE_apiKey,
+  hasAuthDomain: !!import.meta.env.VITE_authDomain,
+  hasProjectId: !!import.meta.env.VITE_projectId,
+  hasStorageBucket: !!import.meta.env.VITE_storageBucket,
+  hasMessagingSenderId: !!import.meta.env.VITE_messagingSenderId,
+  hasAppId: !!import.meta.env.VITE_appId,
+});
 
 // Initialize Firebase with error handling
 let app;
 try {
-  // Only initialize Firebase if we have a valid config
-  if (firebaseConfig.apiKey && firebaseConfig.projectId) {
-    app = initializeApp(firebaseConfig);
-    console.log("Firebase initialized successfully");
-  } else {
-    console.warn("Firebase config not found, running in offline mode");
+  // Check if required config values are present
+  if (!firebaseConfig.apiKey || !firebaseConfig.projectId) {
+    console.warn("⚠️ Firebase config is incomplete. Google authentication will not work.");
+    console.warn("Missing required config values. Please check your .env file.");
     // Initialize with empty config for offline mode
     app = initializeApp({});
+  } else {
+    app = initializeApp(firebaseConfig);
+    console.log("✅ Firebase initialized successfully");
   }
 } catch (error) {
-  console.warn("Firebase initialization error:", error);
+  console.error("❌ Firebase initialization error:", error);
   // Initialize with a default config if env vars are missing
   app = initializeApp({});
 }

@@ -27,9 +27,11 @@ const Login = () => {
          return;
       }
       
+      console.log("Initiating Google sign in...");
       signInWithGoogle()
          .then((result) => {
             const user = result.user;
+            console.log("Google sign in result:", user);
             toast(`Welcome, ${user.displayName || "Google User"}!`, {
                style: {
                   borderRadius: "10px",
@@ -40,7 +42,23 @@ const Login = () => {
             navigate(`${location.state ? location.state : "/"}`);
          })
          .catch((error) => {
-            toast(error.message, {
+            console.error("Google sign in failed:", error);
+            console.error("Error code:", error.code);
+            console.error("Error message:", error.message);
+            
+            let errorMessage = error.message;
+            // Handle common Firebase Google auth errors
+            if (error.code === 'auth/popup-blocked') {
+               errorMessage = "Popup blocked by browser. Please allow popups for this site.";
+            } else if (error.code === 'auth/cancelled-popup-request') {
+               errorMessage = "Authentication popup was closed.";
+            } else if (error.code === 'auth/popup-closed-by-user') {
+               errorMessage = "Google sign in was cancelled.";
+            } else if (error.code === 'auth/internal-error') {
+               errorMessage = "Internal error occurred. Please try again.";
+            }
+            
+            toast(errorMessage, {
                style: {
                   borderRadius: "10px",
                   background: "#ffe169",
