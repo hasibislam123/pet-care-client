@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Outlet } from 'react-router';
 import Hero from '../Components/Hero';
 import Navbar from '../Components/Navbar';
@@ -8,6 +8,7 @@ import Winter_Grooming from  '../assets/Winter-Grooming.jpg'
 import Cozy_Apparel from  '../assets/Cozy_Apparel.jpg'
 import Nutrition_Plans from  '../assets/Nutrition_Plans.jpg'
 import Health_Checkups from  '../assets/Health_Checkups.jpg'
+import { CircleLoader } from 'react-spinners';
 
 const HomeLayout = () => {
    return (
@@ -25,13 +26,17 @@ const HomeLayout = () => {
             {/* Section 3: Category Navigation - Fixed position on mobile and desktop */}
             <section className="LeftNav col-span-1 flex justify-center md:sticky md:top-6 h-fit">
                <div className="md:sticky md:top-6 w-full">
-                  <LeftNav />
+                  <Suspense fallback={<div className="flex justify-center p-4"><CircleLoader color="#e75b04" /></div>}>
+                     <LeftNav />
+                  </Suspense>
                </div>
             </section>
 
             {/* Section 4: Main Content Area */}
             <section className="col-span-1 md:col-span-5 bg-white rounded-xl">
-               <Outlet />
+               <Suspense fallback={<div className="flex justify-center items-center h-64"><CircleLoader color="#e75b04" size={50} /></div>}>
+                  <Outlet />
+               </Suspense>
             </section>
          </main>
          
@@ -43,22 +48,22 @@ const HomeLayout = () => {
                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                   {/* Placeholder cards - in a real app, these would be dynamic */}
                   <div className="bg-white p-6 rounded-xl shadow-md">
-                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Winter_Grooming} />
+                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Winter_Grooming} alt="Winter Grooming" />
                      <h3 className="font-semibold mt-4">Winter Grooming</h3>
                      <p className="text-gray-600 text-sm mt-2">Professional grooming with moisturizing treatments</p>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-md">
-                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Cozy_Apparel} />
+                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Cozy_Apparel} alt="Cozy Apparel" />
                      <h3 className="font-semibold mt-4">Cozy Apparel</h3>
                      <p className="text-gray-600 text-sm mt-2">Custom sweaters and jackets for small breeds</p>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-md">
-                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Nutrition_Plans} />
+                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Nutrition_Plans} alt="Nutrition Plans" />
                      <h3 className="font-semibold mt-4">Nutrition Plans</h3>
                      <p className="text-gray-600 text-sm mt-2">Seasonal dietary recommendations for optimal health</p>
                   </div>
                   <div className="bg-white p-6 rounded-xl shadow-md">
-                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Health_Checkups} />
+                     <img className="bg-gray-200  rounded-xl w-16 h-16" src={Health_Checkups} alt="Health Checkups" />
                      <h3 className="font-semibold mt-4">Health Checkups</h3>
                      <p className="text-gray-600 text-sm mt-2">Comprehensive winter wellness assessments</p>
                   </div>

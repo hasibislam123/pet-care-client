@@ -1,12 +1,12 @@
 import { PawPrint, Eye, EyeOff } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { AuthContext } from "../Provider/AuthProvider";
+import { AuthContext } from "../Contexts/AuthContext";
 import toast from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 
 const Login = () => {
-   const { signIn, signInWithGoogle } = useContext(AuthContext);
+   const { signIn, signInWithGoogle } = useContext(AuthContext) || {};
    const location = useLocation();
    const navigate = useNavigate();
 
@@ -15,6 +15,18 @@ const Login = () => {
 
    // ✅ Google Sign In Function
    const handleGoogleSignin = () => {
+      if (!signInWithGoogle) {
+         toast("Authentication is not available", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
+         return;
+      }
+      
       signInWithGoogle()
          .then((result) => {
             const user = result.user;
@@ -42,6 +54,19 @@ const Login = () => {
    // ✅ Email/Password Login Function
    const handleLogin = (e) => {
       e.preventDefault();
+      
+      if (!signIn) {
+         toast("Authentication is not available", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
+         return;
+      }
+      
       const form = e.target;
       const email = form.email.value;
       const password = form.password.value;
@@ -174,7 +199,7 @@ const Login = () => {
             </form>
 
             <p className="text-center text-white/80 mt-6 text-sm">
-               Don’t have an account?{" "}
+               Don't have an account?{" "}
                <Link to="/auth/register" className="text-pink-300 hover:text-white underline">
                   Register
                </Link>

@@ -1,19 +1,24 @@
 import { PawPrint, Eye, EyeOff } from "lucide-react";
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { AuthContext } from "../Provider/AuthProvider";
+import { AuthContext } from "../Contexts/AuthContext";
 
 const Register = () => {
-   const { createUser, setUser, updateUser, signInWithGoogle } = useContext(AuthContext);
+   const { createUser, setUser, updateUser, signInWithGoogle } = useContext(AuthContext) || {};
    const [showPassword, setShowPassword] = useState(false);
    const navigate = useNavigate();
 
    //  Google Sign-In
    const handleGoogleSignin = () => {
+      if (!signInWithGoogle) {
+         alert("Authentication is not available");
+         return;
+      }
+      
       signInWithGoogle()
          .then((result) => {
             const user = result.user;
-            setUser(user);
+            setUser && setUser(user);
             alert(`Welcome ${user.displayName || "User"}!`);
             navigate("/"); // redirect to home after success
          })
@@ -26,6 +31,12 @@ const Register = () => {
    //  Normal Register
    const handleRegister = (e) => {
       e.preventDefault();
+      
+      if (!createUser || !updateUser || !setUser) {
+         alert("Authentication is not available");
+         return;
+      }
+      
       const form = e.target;
       const name = form.name.value;
       const email = form.email.value;
@@ -52,14 +63,14 @@ const Register = () => {
             const user = userCredential.user;
             updateUser({ displayName: name, photoURL: photo })
                .then(() => {
-                  setUser({ ...user, displayName: name, photoURL: photo });
+                  setUser && setUser({ ...user, displayName: name, photoURL: photo });
                   alert("Registration successful!");
                   form.reset();
                   navigate("/"); // redirect after success
                })
                .catch((error) => {
                   console.error("Profile update error:", error);
-                  setUser(user);
+                  setUser && setUser(user);
                });
          })
          .catch((error) => {

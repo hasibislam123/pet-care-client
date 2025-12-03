@@ -1,17 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { RouterProvider } from 'react-router'
-import router from './Route/RouterProvider.jsx'
-import AuthProvider from './Provider/AuthProvider.jsx'
-import { Toaster } from 'react-hot-toast'
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
+import { RouterProvider } from 'react-router';
+import router from './Route/RouterProvider.jsx';
+import AuthProvider from './Provider/AuthProvider.jsx';
+import { Toaster } from 'react-hot-toast';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
+// Simple render without complex error handling
+const container = document.getElementById('root');
+if (container) {
+  const root = createRoot(container);
+  root.render(
     <AuthProvider>
       <RouterProvider router={router} />
-       <Toaster position="top-center" reverseOrder={false} />
+      <Toaster position="top-center" reverseOrder={false} />
     </AuthProvider>
-  </StrictMode>,
-)
+  );
+} else {
+  console.error('Failed to find the root element');
+}

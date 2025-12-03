@@ -4,7 +4,7 @@ import Cart from '../Components/Cart';
 
 const Categorynews = () => {
    const { id } = useParams();
-   const data = useLoaderData()
+   const data = useLoaderData() || [];
    const [categorynews, setcategorynews] = useState([]);
    const [filteredNews, setFilteredNews] = useState([]);
    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
@@ -13,42 +13,83 @@ const Categorynews = () => {
    const [maxPrice, setMaxPrice] = useState('');
 
    useEffect(() => {
-      const filteredNews = data.filter(news => news.slotsAvailable == id)
-      setcategorynews(filteredNews)
-      setFilteredNews(filteredNews)
-   }, [data, id])
+      try {
+         console.log('Categorynews component loaded with id:', id);
+         console.log('Data received:', data);
+         
+         // Map category ID to category name
+         let categoryName = '';
+         switch(id) {
+            case '1':
+               categoryName = 'Popular Winter Care Services';
+               break;
+            case '2':
+               categoryName = 'Winter Care Tips for Pets';
+               break;
+            case '3':
+               categoryName = 'Meet Our Expert Vets';
+               break;
+            default:
+               categoryName = '';
+         }
+         
+         console.log('Mapped category name:', categoryName);
+         
+         // Filter by category name
+         const filteredNews = categoryName 
+            ? data.filter(news => news && news.category === categoryName)
+            : data;
+            
+         console.log('Filtered news count:', filteredNews.length);
+            
+         setcategorynews(filteredNews);
+         setFilteredNews(filteredNews);
+      } catch (error) {
+         console.error("Error filtering category news:", error);
+         setcategorynews([]);
+         setFilteredNews([]);
+      }
+   }, [data, id]);
 
    useEffect(() => {
-      let result = [...categorynews];
-      
-      // Apply search filter
-      if (searchTerm) {
-         result = result.filter(news => 
-            news.serviceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            news.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            news.providerName.toLowerCase().includes(searchTerm.toLowerCase())
-         );
-      }
-      
-      // Apply price filters
-      if (minPrice) {
-         result = result.filter(news => news.price >= parseFloat(minPrice));
-      }
-      
-      if (maxPrice) {
-         result = result.filter(news => news.price <= parseFloat(maxPrice));
-      }
-      
-      // Apply sorting
-      result.sort((a, b) => {
-         if (sortOrder === 'asc') {
-            return a.serviceName.localeCompare(b.serviceName);
-         } else {
-            return b.serviceName.localeCompare(a.serviceName);
+      try {
+         let result = [...categorynews];
+         
+         // Apply search filter
+         if (searchTerm) {
+            result = result.filter(news => 
+               news && (
+                  (news.serviceName && news.serviceName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                  (news.description && news.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+                  (news.providerName && news.providerName.toLowerCase().includes(searchTerm.toLowerCase()))
+               )
+            );
          }
-      });
-      
-      setFilteredNews(result);
+         
+         // Apply price filters
+         if (minPrice) {
+            result = result.filter(news => news && news.price >= parseFloat(minPrice));
+         }
+         
+         if (maxPrice) {
+            result = result.filter(news => news && news.price <= parseFloat(maxPrice));
+         }
+         
+         // Apply sorting
+         result.sort((a, b) => {
+            if (!a || !b) return 0;
+            if (sortOrder === 'asc') {
+               return (a.serviceName || '').localeCompare(b.serviceName || '');
+            } else {
+               return (b.serviceName || '').localeCompare(a.serviceName || '');
+            }
+         });
+         
+         setFilteredNews(result);
+      } catch (error) {
+         console.error("Error applying filters:", error);
+         setFilteredNews([]);
+      }
    }, [categorynews, searchTerm, minPrice, maxPrice, sortOrder]);
 
    const handleSort = (order) => {
@@ -60,6 +101,18 @@ const Categorynews = () => {
       setMinPrice('');
       setMaxPrice('');
    };
+
+   // Handle case where data is empty or invalid
+   if (!data || !Array.isArray(data)) {
+      console.log('No data available');
+      return (
+         <div className="text-center py-12">
+            <p className="text-xl text-gray-500">No data available</p>
+         </div>
+      );
+   }
+
+   console.log('Rendering Categorynews with', filteredNews.length, 'items');
 
    return (
       <div>

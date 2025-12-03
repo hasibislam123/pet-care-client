@@ -3,19 +3,24 @@ import { Menu } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { BiUser } from "react-icons/bi";
 import Marquee from "react-fast-marquee";
-import { AuthContext } from "../Provider/AuthProvider";
+import { AuthContext } from "../Contexts/AuthContext";
 import { FcGoogle, FcOk } from "react-icons/fc";
 import { toast } from "react-toastify";
 
 
 const Navbar = () => {
-   const { user, logout } = useContext(AuthContext);
+   // Safely get auth context with fallback
+   const authContext = useContext(AuthContext);
+   const { user, logout } = authContext || {};
+   
    const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
    const handleLogout = () => {
-      logout()
-         .then(() => toast.success("You logged out successfully!"))
-         .catch((error) => toast.error(error.message));
+      if (logout) {
+         logout()
+            .then(() => toast.success("You logged out successfully!"))
+            .catch((error) => toast.error(error.message));
+      }
    };
 
    // Public routes visible to all users
@@ -48,9 +53,7 @@ const Navbar = () => {
          <NavLink to='/myprofile' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
             My Profile
          </NavLink>
-         <NavLink to='/orders' className={({ isActive }) => (isActive ? "text-yellow-300 font-semibold" : "hover:text-yellow-300 transition px-3 py-2 rounded-3xl")}>
-            My Orders
-         </NavLink>
+
       </>
    );
 

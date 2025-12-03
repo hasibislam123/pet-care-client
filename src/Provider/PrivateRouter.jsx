@@ -1,23 +1,22 @@
-import React, { use } from 'react';
-import { AuthContext } from './AuthProvider';
+import React, { useContext } from 'react';
 import { Navigate, useLocation } from 'react-router';
-import { CircleLoader } from 'react-spinners';
+import { AuthContext } from '../Contexts/AuthContext';
 
 const PrivateRouter = ({ children }) => {
-   const { user, loading } = use(AuthContext)
-   const location = useLocation();
+    const { user, loading } = useContext(AuthContext) || {};
+    const location = useLocation();
 
+    if (loading) {
+        return <div className="flex justify-center items-center h-screen">
+            <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-500"></div>
+        </div>;
+    }
 
-   if (loading) {
-      return <div className='min-h-screen flex justify-center items-center'><CircleLoader className='size-6' color="#fb8500" /></div>
-   }
+    if (user) {
+        return children;
+    }
 
-
-   if (user && user?.email) {
-      return children
-   }
-   return <Navigate state={location.pathname} to='/auth/login'> </Navigate>
-
+    return <Navigate to="/auth/login" state={{ from: location }} replace />;
 };
 
 export default PrivateRouter;

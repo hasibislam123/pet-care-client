@@ -5,28 +5,46 @@ import { FaStar, FaRegClock, FaTag, FaUserMd } from "react-icons/fa";
 import { Eye, EyeOff } from "lucide-react";
 
 const Details = () => {
-  const data = useLoaderData();
+  const data = useLoaderData() || [];
   const { id } = useParams();
   const [news, setNews] = useState(null);
-  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false); 
 
   useEffect(() => {
-    if (data && data.length > 0) {
-      const details = data.find((singleNews) => singleNews.id == id);
-      setNews(details || null);
+    try {
+      if (data && Array.isArray(data) && data.length > 0) {
+        const details = data.find((singleNews) => singleNews && singleNews.id == id);
+        setNews(details || null);
+      } else {
+        setNews(null);
+      }
+    } catch (error) {
+      console.error("Error finding news item:", error);
+      setNews(null);
     }
   }, [data, id]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     toast.success("Service booked successfully!");
-    setFormData({ name: "", email: "" });
+    setFormData({ name: "", email: "", password: "" });
   };
+
+  // Handle case where data is empty or invalid
+  if (!data || !Array.isArray(data)) {
+    return (
+      <div className="text-center mt-20 text-xl text-gray-700">
+        No data available
+      </div>
+    );
+  }
 
   if (!news) {
     return (
-      <div className="text-center mt-20 text-xl text-gray-700">Loading...</div>
+      <div className="text-center mt-20 text-xl text-gray-700">
+        Service not found
+      </div>
     );
   }
 
@@ -46,6 +64,9 @@ const Details = () => {
               src={news.image || "https://via.placeholder.com/600x400"}
               alt={news.serviceName}
               className="w-full h-96 object-cover"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/600x400?text=Image+Not+Available";
+              }}
             />
           </div>
 
