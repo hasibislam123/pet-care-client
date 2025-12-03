@@ -51,6 +51,8 @@ const Register = () => {
                errorMessage = "Google sign in was cancelled.";
             } else if (error.code === 'auth/internal-error') {
                errorMessage = "Internal error occurred. Please try again.";
+            } else if (error.code === 'auth/network-request-failed') {
+               errorMessage = "Network error. Please check your connection and try again.";
             }
             
             toast(errorMessage, {
@@ -69,7 +71,14 @@ const Register = () => {
       e.preventDefault();
       
       if (!createUser || !updateUser || !setUser) {
-         alert("Authentication is not available");
+         toast("Authentication is not available", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
          return;
       }
       
@@ -81,15 +90,36 @@ const Register = () => {
 
       // Password validation
       if (password.length < 6) {
-         alert("Password must be at least 6 characters long.");
+         toast("Password must be at least 6 characters long.", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
          return;
       }
       if (!/[A-Z]/.test(password)) {
-         alert("Password must contain at least one uppercase letter.");
+         toast("Password must contain at least one uppercase letter.", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
          return;
       }
       if (!/[a-z]/.test(password)) {
-         alert("Password must contain at least one lowercase letter.");
+         toast("Password must contain at least one lowercase letter.", {
+            style: {
+               borderRadius: "10px",
+               background: "#ffe169",
+               border: "2px solid black",
+               color: "#000",
+            },
+         });
          return;
       }
 
@@ -100,18 +130,39 @@ const Register = () => {
             updateUser({ displayName: name, photoURL: photo })
                .then(() => {
                   setUser && setUser({ ...user, displayName: name, photoURL: photo });
-                  alert("Registration successful!");
+                  toast("Registration successful!", {
+                     style: {
+                        borderRadius: "10px",
+                        background: "#333",
+                        color: "#fff",
+                     },
+                  });
                   form.reset();
                   navigate("/"); // redirect after success
                })
                .catch((error) => {
                   console.error("Profile update error:", error);
                   setUser && setUser(user);
+                  toast("Profile update failed. Please update your profile in settings.", {
+                     style: {
+                        borderRadius: "10px",
+                        background: "#ffe169",
+                        border: "2px solid black",
+                        color: "#000",
+                     },
+                  });
                });
          })
          .catch((error) => {
             console.error("Registration error:", error);
-            alert(error.message);
+            toast(error.message, {
+               style: {
+                  borderRadius: "10px",
+                  background: "#ffe169",
+                  border: "2px solid black",
+                  color: "#000",
+               },
+            });
          });
    };
 
