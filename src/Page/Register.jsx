@@ -53,6 +53,8 @@ const Register = () => {
                errorMessage = "Internal error occurred. Please try again.";
             } else if (error.code === 'auth/network-request-failed') {
                errorMessage = "Network error. Please check your connection and try again.";
+            } else if (error.code === 'auth/unauthorized-domain') {
+               errorMessage = "Domain not authorized. Please contact administrator or check Firebase settings.";
             }
             
             toast(errorMessage, {

@@ -56,6 +56,8 @@ const Login = () => {
                errorMessage = "Google sign in was cancelled.";
             } else if (error.code === 'auth/internal-error') {
                errorMessage = "Internal error occurred. Please try again.";
+            } else if (error.code === 'auth/unauthorized-domain') {
+               errorMessage = "Domain not authorized. Please contact administrator or check Firebase settings.";
             }
             
             toast(errorMessage, {

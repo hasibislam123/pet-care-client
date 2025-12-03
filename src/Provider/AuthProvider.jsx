@@ -93,7 +93,7 @@ const AuthProvider = ({ children }) => {
           } else if (error.code === 'auth/invalid-API-key') {
             errorMessage = "Invalid API key. Please check your configuration.";
           } else if (error.code === 'auth/unauthorized-domain') {
-            errorMessage = "This domain is not authorized for OAuth operations. Please contact the administrator.";
+            errorMessage = "This domain is not authorized for OAuth operations. Please contact the administrator or check Firebase console settings.";
           } else if (error.message) {
             errorMessage = error.message;
           }
